@@ -29,7 +29,10 @@
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
+  .logo { display: flex; align-items: center; gap: 12px; }
   .logo img { height: 120px; width: auto; display: block; }
+  .logo-text { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); line-height: 1.1; }
+  .logo-text span { color: #818cf8; }
   .nav-links { display: flex; gap: 2rem; align-items: center; }
   .nav-links a { color: var(--muted); font-size: 0.9rem; transition: color 0.2s; }
   .nav-links a:hover { color: var(--text); }
@@ -186,7 +189,7 @@
 <body>
 
 <nav>
-  <div class="logo"><img src="logo.png" alt="Nextgen Sites" /></div>
+  <div class="logo"><img src="logo.png" alt="Nextgen Sites" /><div class="logo-text">Nextgen<br><span>Sites</span></div></div>
   <div class="nav-links">
     <a href="#services">Services</a>
     <a href="#pricing">Pricing</a>
