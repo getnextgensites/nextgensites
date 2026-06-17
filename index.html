@@ -18,8 +18,24 @@
     --muted: #94a3b8;
     --card-bg: #13131e;
   }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; line-height: 1.6; }
+  body { background: transparent; color: var(--text); font-family: 'Inter', system-ui, sans-serif; line-height: 1.6; }
   a { text-decoration: none; color: inherit; }
+
+  /* eye-to-galaxy background scene */
+  #scene { position: fixed; inset: 0; z-index: -2; overflow: hidden; background: var(--bg); }
+  #scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #scene-overlay {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse at center top, rgba(10,10,15,0.10) 0%, rgba(10,10,15,0.45) 55%, rgba(10,10,15,0.80) 100%);
+  }
+
+  /* scroll reveal */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal.d1 { transition-delay: 0.08s; }
+  .reveal.d2 { transition-delay: 0.16s; }
+  .reveal.d3 { transition-delay: 0.24s; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 
   nav {
     position: sticky; top: 0; z-index: 100;
@@ -82,7 +98,7 @@
     padding: 3rem 2rem;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    background: var(--surface);
+    background: rgba(18,18,26,0.55); backdrop-filter: blur(6px);
   }
   .stat-item { text-align: center; }
   .stat-num { font-size: 2rem; font-weight: 800; color: #818cf8; }
@@ -95,9 +111,10 @@
 
   .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
   .service-card {
-    background: var(--card-bg); border: 1px solid var(--border);
+    background: rgba(19,19,30,0.72); border: 1px solid var(--border);
     border-radius: 14px; padding: 1.75rem;
     transition: border-color 0.2s, transform 0.2s;
+    backdrop-filter: blur(6px);
   }
   .service-card:hover { border-color: rgba(99,102,241,0.4); transform: translateY(-2px); }
   .service-icon {
@@ -110,9 +127,10 @@
 
   .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
   .pricing-card {
-    background: var(--card-bg); border: 1px solid var(--border);
+    background: rgba(19,19,30,0.72); border: 1px solid var(--border);
     border-radius: 14px; padding: 2rem;
     display: flex; flex-direction: column;
+    backdrop-filter: blur(6px);
   }
   .pricing-card.featured { border-color: var(--accent); }
   .plan-badge {
@@ -153,9 +171,9 @@
   .step p { color: var(--muted); font-size: 0.875rem; }
 
   .contact-wrap {
-    background: var(--surface); border: 1px solid var(--border);
+    background: rgba(18,18,26,0.72); border: 1px solid var(--border);
     border-radius: 20px; padding: 3rem; max-width: 640px; margin: 0 auto;
-    text-align: center;
+    text-align: center; backdrop-filter: blur(8px);
   }
   .contact-wrap p { color: var(--muted); margin-bottom: 2rem; }
   .contact-fields { display: flex; flex-direction: column; gap: 1rem; text-align: left; margin-bottom: 1.5rem; }
@@ -177,28 +195,103 @@
   }
   footer strong { color: var(--text); }
 
+  /* animated hero glow */
+  .hero h1 { position: relative; }
+  .hero-glow {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 460px; height: 460px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.25), transparent 65%);
+    filter: blur(20px); z-index: -1; pointer-events: none;
+    animation: glowPulse 5s ease-in-out infinite;
+  }
+  @keyframes glowPulse { 0%,100%{opacity:0.7; transform:translate(-50%,-50%) scale(1);} 50%{opacity:1; transform:translate(-50%,-50%) scale(1.12);} }
+
+  /* quiz */
+  .quiz-wrap {
+    background: rgba(18,18,26,0.72); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2.5rem; max-width: 640px; margin: 0 auto;
+    backdrop-filter: blur(8px);
+  }
+  .quiz-progress { height: 5px; background: rgba(255,255,255,0.07); border-radius: 10px; margin-bottom: 2rem; overflow: hidden; }
+  .quiz-progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 10px; transition: width 0.4s ease; }
+  .quiz-step { display: none; }
+  .quiz-step.active { display: block; animation: qfade 0.4s ease; }
+  @keyframes qfade { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+  .quiz-qnum { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.6rem; }
+  .quiz-q { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 1.5rem; }
+  .quiz-opts { display: flex; flex-direction: column; gap: 0.7rem; }
+  .quiz-opt {
+    background: rgba(10,10,15,0.6); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.25rem; cursor: pointer;
+    font-size: 0.95rem; color: var(--text); text-align: left; font-family: inherit;
+    display: flex; align-items: center; gap: 0.8rem; transition: all 0.2s;
+  }
+  .quiz-opt:hover { border-color: var(--accent); background: rgba(99,102,241,0.12); transform: translateX(4px); }
+  .quiz-opt .qe { font-size: 1.2rem; }
+  .quiz-result { display: none; text-align: center; }
+  .quiz-result.active { display: block; animation: qfade 0.5s ease; }
+  .quiz-result-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.75rem; }
+  .quiz-result-plan { font-size: 2rem; font-weight: 800; color: var(--text); margin-bottom: 0.5rem; }
+  .quiz-result-plan span { color: var(--accent2); }
+  .quiz-result-desc { color: var(--muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.75rem; }
+  .quiz-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+  .quiz-btn {
+    background: var(--accent); color: #fff; border: none; cursor: pointer;
+    padding: 0.8rem 1.75rem; border-radius: 10px; font-weight: 700; font-size: 0.95rem;
+    font-family: inherit; transition: opacity 0.2s;
+  }
+  .quiz-btn:hover { opacity: 0.85; }
+  .quiz-btn.ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+
+  /* portfolio */
+  .portfolio-card {
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 0; overflow: hidden;
+    background: rgba(19,19,30,0.72); border: 1px solid var(--border);
+    border-radius: 18px; backdrop-filter: blur(8px); max-width: 900px; margin: 0 auto;
+  }
+  .portfolio-info { padding: 2.5rem; }
+  .portfolio-tag { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent2); background: rgba(99,102,241,0.15); padding: 0.2rem 0.7rem; border-radius: 99px; margin-bottom: 1rem; }
+  .portfolio-info h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.6rem; }
+  .portfolio-info p { color: var(--muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1.5rem; }
+  .portfolio-link { display: inline-flex; align-items: center; gap: 6px; color: var(--accent2); font-weight: 700; font-size: 0.92rem; }
+  .portfolio-visual {
+    background: linear-gradient(135deg, #3a2818, #1a1208); position: relative;
+    display: flex; align-items: center; justify-content: center; min-height: 260px; overflow: hidden;
+  }
+  .portfolio-visual img { width: 100%; height: 100%; object-fit: cover; }
+  .portfolio-fallback { text-align: center; padding: 2rem; }
+  .portfolio-fallback .pf-logo { font-family: Georgia, serif; font-size: 1.6rem; font-weight: 700; color: #e3c862; letter-spacing: -0.01em; }
+  .portfolio-fallback .pf-sub { font-size: 0.8rem; color: #b89b5a; margin-top: 0.3rem; letter-spacing: 0.05em; }
+  @media (max-width: 640px) { .portfolio-card { grid-template-columns: 1fr; } .portfolio-visual { min-height: 200px; } }
+
   @media (max-width: 600px) {
     nav { padding: 1rem; }
     .nav-links a:not(.nav-cta) { display: none; }
     .hero { padding: 4rem 1.5rem 3rem; }
     section { padding: 3rem 1.5rem; }
     .contact-wrap { padding: 2rem 1.25rem; }
+    .hero-glow { width: 320px; height: 320px; }
   }
 </style>
 </head>
 <body>
+
+<div id="scene"><canvas id="eyeCanvas"></canvas></div>
+<div id="scene-overlay"></div>
 
 <nav>
   <div class="logo"><img src="logo.png" alt="Nextgen Sites" /><div class="logo-text">Nextgen<br><span>Sites</span></div></div>
   <div class="nav-links">
     <a href="#services">Services</a>
     <a href="#pricing">Pricing</a>
+    <a href="#portfolio">Our Work</a>
     <a href="#process">Process</a>
     <a href="#contact" class="nav-cta">Get Started</a>
   </div>
 </nav>
 
 <div class="hero">
+  <div class="hero-glow"></div>
   <div class="badge"><span class="badge-dot"></span> AI-Powered Web Design</div>
   <h1>Your business deserves a <em>real website</em></h1>
   <p>We build fast, modern websites for local businesses using cutting-edge AI — at a fraction of the cost of traditional agencies.</p>
@@ -216,36 +309,36 @@
 </div>
 
 <section id="services">
-  <div class="section-label">What we offer</div>
-  <div class="section-title">Everything your business needs online</div>
-  <p class="section-sub">We handle the tech so you can focus on running your business.</p>
+  <div class="section-label reveal">What we offer</div>
+  <div class="section-title reveal">Everything your business needs online</div>
+  <p class="section-sub reveal">We handle the tech so you can focus on running your business.</p>
   <div class="services-grid">
-    <div class="service-card">
+    <div class="service-card reveal">
       <div class="service-icon">🌐</div>
       <h3>Website Design & Build</h3>
       <p>A clean, professional website tailored to your brand — mobile-friendly and fast-loading from day one.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card reveal">
       <div class="service-icon">🤖</div>
       <h3>AI-Powered Features</h3>
       <p>Smart chatbots, automated contact forms, and AI tools that make your site work harder for you 24/7.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card reveal">
       <div class="service-icon">🔍</div>
       <h3>SEO Basics</h3>
       <p>We optimize your site so local customers can find you on Google — without paying for ads.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card reveal">
       <div class="service-icon">🔧</div>
       <h3>Ongoing Maintenance</h3>
       <p>Need to update hours, add photos, or change a price? We handle it fast so you never have to.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card reveal">
       <div class="service-icon">📱</div>
       <h3>Social Media Setup</h3>
       <p>We set up and link your social profiles to your site for a consistent, professional online presence.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card reveal">
       <div class="service-icon">⚡</div>
       <h3>Fast Turnaround</h3>
       <p>Most sites are live within 7 days. No waiting months for an agency to get started.</p>
@@ -253,12 +346,61 @@
   </div>
 </section>
 
+<section id="quiz">
+  <div class="section-label" style="text-align:center">Find your fit</div>
+  <div class="section-title" style="text-align:center">What kind of site do you need?</div>
+  <p class="section-sub" style="margin-left:auto;margin-right:auto;text-align:center">Answer a few quick questions and we'll recommend the perfect package for your business.</p>
+  <div class="quiz-wrap reveal">
+    <div class="quiz-progress"><div class="quiz-progress-bar" id="qbar"></div></div>
+
+    <div class="quiz-step active" data-step="0">
+      <div class="quiz-qnum">Question 1 of 3</div>
+      <div class="quiz-q">What's the main goal for your website?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="qAnswer('goal','presence')"><span class="qe">🌐</span> Just get online with a professional presence</button>
+        <button class="quiz-opt" onclick="qAnswer('goal','customers')"><span class="qe">📈</span> Bring in new customers and leads</button>
+        <button class="quiz-opt" onclick="qAnswer('goal','grow')"><span class="qe">🚀</span> Grow and manage my business long-term</button>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="1">
+      <div class="quiz-qnum">Question 2 of 3</div>
+      <div class="quiz-q">How many pages do you think you'll need?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="qAnswer('size','small')"><span class="qe">📄</span> Just a few — keep it simple</button>
+        <button class="quiz-opt" onclick="qAnswer('size','medium')"><span class="qe">📑</span> A handful of pages with some features</button>
+        <button class="quiz-opt" onclick="qAnswer('size','large')"><span class="qe">📚</span> A full site I'll keep updating over time</button>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="2">
+      <div class="quiz-qnum">Question 3 of 3</div>
+      <div class="quiz-q">Do you want ongoing help after launch?</div>
+      <div class="quiz-opts">
+        <button class="quiz-opt" onclick="qAnswer('care','none')"><span class="qe">✅</span> No — build it and I'm good</button>
+        <button class="quiz-opt" onclick="qAnswer('care','some')"><span class="qe">🔧</span> Maybe occasional updates</button>
+        <button class="quiz-opt" onclick="qAnswer('care','full')"><span class="qe">🤝</span> Yes — keep it fresh and handle everything</button>
+      </div>
+    </div>
+
+    <div class="quiz-result" id="qresult">
+      <div class="quiz-result-label">Our Recommendation</div>
+      <div class="quiz-result-plan" id="qplan">—</div>
+      <div class="quiz-result-desc" id="qdesc"></div>
+      <div class="quiz-actions">
+        <a href="#contact" class="quiz-btn">Get Started</a>
+        <button class="quiz-btn ghost" onclick="qReset()">Retake Quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="pricing">
-  <div class="section-label">Pricing</div>
-  <div class="section-title">Simple, honest pricing</div>
-  <p class="section-sub">No hidden fees. No confusing packages. Just real websites at prices that make sense for small businesses.</p>
+  <div class="section-label reveal">Pricing</div>
+  <div class="section-title reveal">Simple, honest pricing</div>
+  <p class="section-sub reveal">No hidden fees. No confusing packages. Just real websites at prices that make sense for small businesses.</p>
   <div class="pricing-grid">
-    <div class="pricing-card">
+    <div class="pricing-card reveal">
       <div class="plan-name">Starter</div>
       <div class="plan-price">$499 <span>one-time</span></div>
       <div class="plan-desc">Perfect for getting online fast with a clean, professional presence.</div>
@@ -271,7 +413,7 @@
       </ul>
       <a href="#contact" class="plan-btn outline">Get started</a>
     </div>
-    <div class="pricing-card featured">
+    <div class="pricing-card featured reveal">
       <div class="plan-badge">Most Popular</div>
       <div class="plan-name">Growth</div>
       <div class="plan-price">$799 <span>one-time</span></div>
@@ -286,7 +428,7 @@
       </ul>
       <a href="#contact" class="plan-btn">Get started</a>
     </div>
-    <div class="pricing-card">
+    <div class="pricing-card reveal">
       <div class="plan-name">Pro</div>
       <div class="plan-price">$999 <span>/year</span></div>
       <div class="plan-desc">Everything in Growth plus ongoing care so your site always stays fresh.</div>
@@ -303,14 +445,34 @@
 </section>
 
 <section id="process">
-  <div class="section-label">How it works</div>
-  <div class="section-title">Live in days, not months</div>
-  <p class="section-sub">Our AI-powered process is fast, simple, and keeps you in the loop the whole way.</p>
+  <div class="section-label reveal">How it works</div>
+  <div class="section-title reveal">Live in days, not months</div>
+  <p class="section-sub reveal">Our AI-powered process is fast, simple, and keeps you in the loop the whole way.</p>
   <div class="process-steps">
-    <div class="step"><div class="step-num">1</div><h3>We chat</h3><p>Tell us about your business, your goals, and what you like. 30 minutes max.</p></div>
-    <div class="step"><div class="step-num">2</div><h3>We build</h3><p>Our AI tools get to work. You get a first draft within 48–72 hours.</p></div>
-    <div class="step"><div class="step-num">3</div><h3>You review</h3><p>Give us your feedback and we fine-tune everything until it's exactly right.</p></div>
-    <div class="step"><div class="step-num">4</div><h3>You go live</h3><p>We launch your site and make sure everything works perfectly.</p></div>
+    <div class="step reveal"><div class="step-num">1</div><h3>We chat</h3><p>Tell us about your business, your goals, and what you like. 30 minutes max.</p></div>
+    <div class="step reveal"><div class="step-num">2</div><h3>We build</h3><p>Our AI tools get to work. You get a first draft within 48–72 hours.</p></div>
+    <div class="step reveal"><div class="step-num">3</div><h3>You review</h3><p>Give us your feedback and we fine-tune everything until it's exactly right.</p></div>
+    <div class="step reveal"><div class="step-num">4</div><h3>You go live</h3><p>We launch your site and make sure everything works perfectly.</p></div>
+  </div>
+</section>
+
+<section id="portfolio">
+  <div class="section-label" style="text-align:center">Our work</div>
+  <div class="section-title" style="text-align:center">See a site we built</div>
+  <p class="section-sub" style="margin-left:auto;margin-right:auto;text-align:center">Real businesses, real results. Here's a live site we designed and built from scratch.</p>
+  <div class="portfolio-card reveal">
+    <div class="portfolio-info">
+      <span class="portfolio-tag">Flooring · Live Site</span>
+      <h3>Hibbard Floor & More</h3>
+      <p>A warm, full-featured website for a family-owned flooring business — complete with a filterable photo gallery, instant quote estimator, square-footage calculator, interactive service-area map, and a "which floor is right for you?" quiz.</p>
+      <a class="portfolio-link" href="https://getnextgensites.github.io/Hibbardfloorandmore" target="_blank" rel="noopener">Visit the live site →</a>
+    </div>
+    <div class="portfolio-visual">
+      <div class="portfolio-fallback">
+        <div class="pf-logo">Hibbard Floor &amp; More</div>
+        <div class="pf-sub">Dayton → Cincinnati</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -332,8 +494,143 @@
 </section>
 
 <footer>
-  <strong>NextgenSites</strong> &nbsp;·&nbsp; AI-Powered Websites for Local Businesses &nbsp;·&nbsp; Built with ❤️ for small business owners
+  <strong>Nextgen Sites</strong> &nbsp;·&nbsp; AI-Powered Websites for Local Businesses &nbsp;·&nbsp; Built with ❤️ for small business owners
 </footer>
+
+<script>
+/* ===== EYE → GALAXY BACKGROUND ===== */
+(function(){
+  const canvas = document.getElementById('eyeCanvas');
+  const ctx = canvas.getContext('2d');
+  let W,H,cx,cy;
+  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; cx=W/2; cy=H/2; }
+  resize(); window.addEventListener('resize', resize);
+
+  const fibers=[];
+  for(let i=0;i<260;i++){ const a=Math.random()*Math.PI*2; fibers.push({a,len:0.45+Math.random()*0.5,w:0.3+Math.random()*1.2,hue:225+Math.random()*40,off:Math.random()}); }
+  const stars=[];
+  for(let i=0;i<440;i++){ stars.push({x:Math.random()*2-1,y:Math.random()*2-1,z:Math.random(),r:Math.random()*1.6+0.3,tw:Math.random()*Math.PI*2}); }
+
+  let scrollProg=0;
+  function onScroll(){ const max=window.innerHeight*1.4; scrollProg=Math.min(1, window.scrollY/max); }
+  window.addEventListener('scroll', onScroll); onScroll();
+
+  let t=0;
+  function draw(){
+    t+=0.005;
+    ctx.clearRect(0,0,W,H);
+    const p=scrollProg;
+    const eyeFade=Math.max(0,1-p*1.5);
+    const galaxyFade=Math.max(0,(p-0.15)/0.85);
+    const baseR=Math.min(W,H)*0.34;
+    const zoom=1+p*2.4;
+
+    if(galaxyFade>0){
+      const ng=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*0.8);
+      ng.addColorStop(0,`rgba(99,102,241,${0.20*galaxyFade})`);
+      ng.addColorStop(0.4,`rgba(129,140,248,${0.09*galaxyFade})`);
+      ng.addColorStop(1,'rgba(10,10,15,0)');
+      ctx.fillStyle=ng; ctx.fillRect(0,0,W,H);
+      for(const s of stars){
+        const depth=(s.z+p*1.2)%1;
+        const dist=depth*Math.max(W,H)*0.75;
+        const x=cx+Math.cos(s.x*Math.PI)*dist*(0.6+Math.abs(s.x));
+        const y=cy+Math.sin(s.y*Math.PI)*dist*(0.6+Math.abs(s.y));
+        const tw=0.6+0.4*Math.sin(t*3+s.tw);
+        ctx.globalAlpha=galaxyFade*tw*(0.4+depth*0.6);
+        ctx.fillStyle=s.z>0.7?'#c7d2fe':(s.z>0.4?'#818cf8':'#ffffff');
+        ctx.beginPath(); ctx.arc(x,y,s.r*(0.5+depth),0,Math.PI*2); ctx.fill();
+      }
+      ctx.globalAlpha=1;
+    }
+
+    if(eyeFade>0){
+      const R=baseR*zoom;
+      const ig=ctx.createRadialGradient(cx,cy,R*0.16,cx,cy,R);
+      ig.addColorStop(0,`rgba(20,20,35,${eyeFade})`);
+      ig.addColorStop(0.18,`rgba(49,46,129,${eyeFade})`);
+      ig.addColorStop(0.5,`rgba(99,102,241,${eyeFade})`);
+      ig.addColorStop(0.8,`rgba(129,140,248,${eyeFade})`);
+      ig.addColorStop(1,`rgba(67,56,202,${eyeFade*0.3})`);
+      ctx.fillStyle=ig;
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+      for(const f of fibers){
+        const r1=R*0.17, r2=R*(0.17+f.len*0.83);
+        const a=f.a+Math.sin(t*2+f.off*6)*0.02;
+        ctx.strokeStyle=`hsla(${f.hue},70%,${55+f.off*20}%,${eyeFade*0.5})`;
+        ctx.lineWidth=f.w;
+        ctx.beginPath();
+        ctx.moveTo(cx+Math.cos(a)*r1, cy+Math.sin(a)*r1);
+        ctx.lineTo(cx+Math.cos(a)*r2, cy+Math.sin(a)*r2);
+        ctx.stroke();
+      }
+      ctx.strokeStyle=`rgba(30,27,75,${eyeFade*0.8})`;
+      ctx.lineWidth=R*0.04;
+      ctx.beginPath(); ctx.arc(cx,cy,R*0.98,0,Math.PI*2); ctx.stroke();
+      const pr=R*0.17;
+      const pg=ctx.createRadialGradient(cx,cy,0,cx,cy,pr);
+      pg.addColorStop(0,'rgba(5,5,12,1)');
+      pg.addColorStop(0.7,`rgba(10,10,20,${eyeFade})`);
+      pg.addColorStop(1,`rgba(40,40,90,${eyeFade*0.6})`);
+      ctx.fillStyle=pg;
+      ctx.beginPath(); ctx.arc(cx,cy,pr,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha=eyeFade*0.8;
+      ctx.fillStyle='rgba(200,210,255,0.6)';
+      ctx.beginPath(); ctx.arc(cx-pr*0.4,cy-pr*0.4,pr*0.18,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha=1;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ===== QUIZ ===== */
+let qAns={}, qStep=0; const qTotal=3;
+function qAnswer(k,v){
+  qAns[k]=v; qStep++;
+  document.getElementById('qbar').style.width=(qStep/qTotal*100)+'%';
+  if(qStep<qTotal){
+    document.querySelectorAll('.quiz-step').forEach(s=>s.classList.remove('active'));
+    document.querySelector('.quiz-step[data-step="'+qStep+'"]').classList.add('active');
+  } else { qShow(); }
+}
+function qShow(){
+  document.querySelectorAll('.quiz-step').forEach(s=>s.classList.remove('active'));
+  const plans={
+    Starter:{name:'Starter',price:'$499',desc:"Perfect for getting online fast with a clean, professional presence. A few pages, mobile-friendly, with a contact form and basic SEO to get you found."},
+    Growth:{name:'Growth',price:'$799',desc:"Our most popular pick — a full site with AI-powered features, full SEO, social media setup, and Google Business integration to actively bring customers in."},
+    Pro:{name:'Pro',price:'$999/yr',desc:"Everything in Growth plus ongoing care — monthly updates, priority support, performance monitoring, and unlimited small edits so your site always stays fresh."}
+  };
+  let pick='Growth';
+  const a=qAns;
+  let score=0;
+  if(a.goal==='presence') score-=1; if(a.goal==='grow') score+=1;
+  if(a.size==='small') score-=1; if(a.size==='large') score+=1;
+  if(a.care==='none') score-=1; if(a.care==='full') score+=2;
+  if(a.care==='full') pick='Pro';
+  else if(score<=-2) pick='Starter';
+  else if(score>=2) pick='Pro';
+  else pick='Growth';
+  document.getElementById('qplan').innerHTML='The <span>'+plans[pick].name+'</span> plan · '+plans[pick].price;
+  document.getElementById('qdesc').textContent=plans[pick].desc;
+  document.getElementById('qresult').classList.add('active');
+}
+function qReset(){
+  qAns={}; qStep=0;
+  document.getElementById('qbar').style.width='0%';
+  document.getElementById('qresult').classList.remove('active');
+  document.querySelectorAll('.quiz-step').forEach(s=>s.classList.remove('active'));
+  document.querySelector('.quiz-step[data-step="0"]').classList.add('active');
+}
+
+/* ===== SCROLL REVEAL ===== */
+document.addEventListener('DOMContentLoaded', function(){
+  const obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, {threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
+});
+</script>
 
 </body>
 </html>
