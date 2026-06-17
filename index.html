@@ -40,12 +40,13 @@
   nav {
     position: sticky; top: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
+    gap: 3rem;
     padding: 1rem 2rem;
     background: rgba(10,10,15,0.9);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
-  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
   .logo img { height: 120px; width: auto; display: block; }
   .logo-text { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); line-height: 1.1; }
   .logo-text span { color: #818cf8; }
@@ -76,6 +77,8 @@
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
   h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 1.25rem; }
   h1 em { font-style: normal; color: #818cf8; }
+  .type-cursor { color: #818cf8; font-weight: 400; animation: blink 1s step-end infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
   .hero p { font-size: 1.15rem; color: var(--muted); max-width: 560px; margin: 0 auto 2.5rem; }
   .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
   .btn-primary {
@@ -243,7 +246,140 @@
   .quiz-btn:hover { opacity: 0.85; }
   .quiz-btn.ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
 
-  /* portfolio */
+  /* site builder demo */
+  .builder-wrap { max-width: 940px; margin: 0 auto; }
+  .builder-controls {
+    background: rgba(18,18,26,0.72); border: 1px solid var(--border);
+    border-radius: 16px; padding: 1.75rem; backdrop-filter: blur(8px);
+    display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end; margin-bottom: 1.5rem;
+  }
+  .builder-field { display: flex; flex-direction: column; gap: 0.4rem; }
+  .builder-field label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent2); }
+  .builder-field input, .builder-field select {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.7rem 0.9rem; color: var(--text); font-size: 0.95rem; font-family: inherit; outline: none;
+    transition: border-color 0.2s;
+  }
+  .builder-field input:focus, .builder-field select:focus { border-color: var(--accent); }
+  .builder-field select option { background: var(--surface); }
+  .builder-btn {
+    background: var(--accent); color: #fff; border: none; cursor: pointer;
+    padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 700; font-size: 0.95rem;
+    font-family: inherit; white-space: nowrap; transition: opacity 0.2s; height: fit-content;
+  }
+  .builder-btn:hover { opacity: 0.85; }
+  .builder-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* browser mockup */
+  .browser {
+    background: #fff; border-radius: 14px; overflow: hidden;
+    border: 1px solid var(--border); box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    min-height: 420px; position: relative;
+  }
+  .browser-bar { background: #e8e8ee; padding: 0.7rem 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .browser-dot { width: 11px; height: 11px; border-radius: 50%; }
+  .browser-url { flex: 1; background: #fff; border-radius: 6px; padding: 0.3rem 0.8rem; font-size: 0.78rem; color: #555; margin-left: 0.5rem; text-align: center; }
+  .browser-body { position: relative; min-height: 380px; overflow: hidden; }
+  .builder-placeholder {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 0.75rem; color: #94a3b8; text-align: center; padding: 2rem;
+  }
+  .builder-placeholder .bp-icon { font-size: 2.5rem; }
+  .builder-loading { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; background: #0a0a0f; z-index: 5; }
+  .builder-loading.active { display: flex; }
+  .builder-loading .spinner { width: 44px; height: 44px; border: 3px solid rgba(129,140,248,0.2); border-top-color: #818cf8; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .builder-loading .bl-text { color: #818cf8; font-size: 0.9rem; font-weight: 600; }
+
+  /* generated mock site */
+  .mock { display: none; flex-direction: column; font-size: 0.8rem; animation: qfade 0.6s ease; }
+  .mock.active { display: flex; }
+  .browser-body { position: relative; min-height: 380px; max-height: 560px; overflow-y: auto; }
+  .mock-nav { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.5rem; position: sticky; top: 0; z-index: 3; backdrop-filter: blur(6px); }
+  .mock-logo { font-weight: 800; font-size: 1rem; display: flex; align-items: center; gap: 0.4rem; }
+  .mock-links { display: flex; gap: 1rem; font-size: 0.72rem; align-items: center; }
+  .mock-links .ml-cta { padding: 0.3rem 0.8rem; border-radius: 6px; color: #fff; font-weight: 700; }
+  .mock-hero { padding: 2.75rem 1.5rem; text-align: center; position: relative; overflow: hidden; }
+  .mock-hero .mh-badge { display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.75rem; border-radius: 99px; margin-bottom: 0.9rem; }
+  .mock-hero h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.15; }
+  .mock-hero p { font-size: 0.82rem; opacity: 0.75; max-width: 380px; margin: 0 auto 1.25rem; line-height: 1.6; }
+  .mock-hero-btns { display: flex; gap: 0.6rem; justify-content: center; }
+  .mock-btn { display: inline-block; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 700; font-size: 0.76rem; color: #fff; }
+  .mock-btn.ghost { background: transparent !important; border: 1px solid currentColor; }
+  .mock-stats { display: flex; justify-content: center; gap: 2rem; padding: 1rem 1.5rem; flex-wrap: wrap; }
+  .mock-stat { text-align: center; }
+  .mock-stat .ms-n { font-weight: 800; font-size: 1.1rem; }
+  .mock-stat .ms-l { font-size: 0.62rem; opacity: 0.6; }
+  .mock-section-label { text-align: center; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin: 1.5rem 0 0.25rem; }
+  .mock-section-title { text-align: center; font-weight: 800; font-size: 1.1rem; margin-bottom: 1rem; }
+  .mock-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75rem; padding: 0 1.5rem 1.25rem; }
+  .mock-card { padding: 1rem; border-radius: 10px; }
+  .mock-card .mc-ico { font-size: 1.4rem; margin-bottom: 0.5rem; }
+  .mock-card .mc-t { font-weight: 700; font-size: 0.78rem; margin-bottom: 0.25rem; }
+  .mock-card .mc-d { font-size: 0.68rem; opacity: 0.6; line-height: 1.4; }
+  .mock-gallery { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.5rem; padding: 0 1.5rem 1.25rem; }
+  .mock-gal-item { aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+  .mock-review { margin: 0 1.5rem 1.25rem; padding: 1.1rem 1.25rem; border-radius: 10px; text-align: center; }
+  .mock-review .mr-stars { font-size: 0.8rem; margin-bottom: 0.4rem; }
+  .mock-review .mr-text { font-size: 0.76rem; font-style: italic; opacity: 0.8; line-height: 1.5; margin-bottom: 0.4rem; }
+  .mock-review .mr-name { font-size: 0.68rem; font-weight: 700; opacity: 0.7; }
+  .mock-cta-band { padding: 1.5rem; text-align: center; }
+  .mock-cta-band h4 { font-size: 1rem; font-weight: 800; margin-bottom: 0.3rem; }
+  .mock-cta-band p { font-size: 0.72rem; opacity: 0.85; margin-bottom: 0.8rem; }
+  .mock-footer { padding: 1rem 1.5rem; text-align: center; font-size: 0.66rem; opacity: 0.55; }
+  .builder-note { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 1.25rem; }
+  @media (max-width: 700px) {
+    .builder-controls { grid-template-columns: 1fr; }
+    .mock-cards { grid-template-columns: 1fr; }
+    .mock-links { display: none; }
+  }
+
+  /* AI chat assistant */
+  .chat-fab {
+    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 95;
+    width: 60px; height: 60px; border-radius: 50%; cursor: pointer; border: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-size: 1.5rem; box-shadow: 0 8px 30px rgba(99,102,241,0.5);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s; animation: fabPulse 3s ease-in-out infinite;
+  }
+  .chat-fab:hover { transform: scale(1.08); }
+  @keyframes fabPulse { 0%,100%{box-shadow:0 8px 30px rgba(99,102,241,0.4);} 50%{box-shadow:0 8px 42px rgba(99,102,241,0.75);} }
+  .chat-panel {
+    position: fixed; bottom: 6.5rem; right: 1.5rem; z-index: 96;
+    width: 370px; max-width: calc(100vw - 3rem); height: 480px; max-height: calc(100vh - 9rem);
+    background: rgba(16,16,24,0.96); border: 1px solid var(--border); border-radius: 18px;
+    backdrop-filter: blur(14px); display: none; flex-direction: column; overflow: hidden;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.6);
+  }
+  .chat-panel.open { display: flex; animation: qfade 0.3s ease; }
+  .chat-header {
+    padding: 1.1rem 1.25rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.7rem;
+    background: linear-gradient(135deg, rgba(99,102,241,0.18), transparent);
+  }
+  .chat-header .ch-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .chat-header .ch-name { font-weight: 700; font-size: 0.95rem; }
+  .chat-header .ch-status { font-size: 0.72rem; color: #4ade80; display: flex; align-items: center; gap: 4px; }
+  .chat-header .ch-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #4ade80; }
+  .chat-close { margin-left: auto; background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; line-height: 1; }
+  .chat-body { flex: 1; overflow-y: auto; padding: 1.1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+  .chat-msg { max-width: 82%; padding: 0.7rem 1rem; border-radius: 14px; font-size: 0.88rem; line-height: 1.5; }
+  .chat-msg.bot { background: var(--surface2); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .chat-msg.user { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chat-typing { align-self: flex-start; display: flex; gap: 4px; padding: 0.8rem 1rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; }
+  .chat-typing span { width: 7px; height: 7px; border-radius: 50%; background: var(--accent2); animation: ctype 1.2s infinite; }
+  .chat-typing span:nth-child(2){ animation-delay: 0.2s; } .chat-typing span:nth-child(3){ animation-delay: 0.4s; }
+  @keyframes ctype { 0%,60%,100%{opacity:0.3; transform:translateY(0);} 30%{opacity:1; transform:translateY(-4px);} }
+  .chat-suggestions { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0 1.1rem 0.6rem; }
+  .chat-sugg { font-size: 0.74rem; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3); color: var(--accent2); padding: 0.35rem 0.7rem; border-radius: 99px; cursor: pointer; transition: background 0.2s; }
+  .chat-sugg:hover { background: rgba(99,102,241,0.25); }
+  .chat-input-row { display: flex; gap: 0.5rem; padding: 0.85rem; border-top: 1px solid var(--border); }
+  .chat-input-row input { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.65rem 0.9rem; color: var(--text); font-size: 0.9rem; font-family: inherit; outline: none; }
+  .chat-input-row input:focus { border-color: var(--accent); }
+  .chat-send { background: var(--accent); border: none; color: #fff; width: 42px; border-radius: 10px; cursor: pointer; font-size: 1.1rem; transition: opacity 0.2s; }
+  .chat-send:hover { opacity: 0.85; }
+
   .portfolio-card {
     display: grid; grid-template-columns: 1.1fr 1fr; gap: 0; overflow: hidden;
     background: rgba(19,19,30,0.72); border: 1px solid var(--border);
@@ -292,6 +428,7 @@
 <nav>
   <div class="logo"><img src="logo.png" alt="Nextgen Sites" /><div class="logo-text">Nextgen<br><span>Sites</span></div></div>
   <div class="nav-links">
+    <a href="#demo">Live Demo</a>
     <a href="#services">Services</a>
     <a href="#pricing">Pricing</a>
     <a href="#portfolio">Our Work</a>
@@ -303,7 +440,7 @@
 <div class="hero">
   <div class="hero-glow"></div>
   <div class="badge"><span class="badge-dot"></span> AI-Powered Web Design</div>
-  <h1>Your business deserves a <em>real website</em></h1>
+  <h1>Your business deserves <em id="typed">a real website</em><span class="type-cursor">|</span></h1>
   <p>We build fast, modern websites for local businesses using cutting-edge AI — at a fraction of the cost of traditional agencies.</p>
   <div class="hero-btns">
     <a href="#contact" class="btn-primary">Get your site for $499</a>
@@ -317,6 +454,55 @@
   <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">AI-powered builds</div></div>
   <div class="stat-item"><div class="stat-num">Local</div><div class="stat-label">Focused & personal</div></div>
 </div>
+
+<section id="demo">
+  <div class="section-label reveal" style="text-align:center">Try it yourself</div>
+  <div class="section-title reveal" style="text-align:center">Watch AI build a site in seconds</div>
+  <p class="section-sub reveal" style="margin-left:auto;margin-right:auto;text-align:center">Enter your business name and pick your industry — we'll generate a live preview right here. This is a taste of what we'd build for you.</p>
+  <div class="builder-wrap reveal">
+    <div class="builder-controls">
+      <div class="builder-field">
+        <label for="biz-name">Business name</label>
+        <input type="text" id="biz-name" placeholder="e.g. Sunrise Bakery" maxlength="28" />
+      </div>
+      <div class="builder-field">
+        <label for="biz-type">Industry</label>
+        <select id="biz-type">
+          <option value="bakery">Bakery / Cafe</option>
+          <option value="salon">Salon / Barber</option>
+          <option value="landscaping">Landscaping</option>
+          <option value="cleaning">Cleaning Service</option>
+          <option value="auto">Auto Repair</option>
+          <option value="fitness">Gym / Fitness</option>
+          <option value="restaurant">Restaurant</option>
+          <option value="contractor">Contractor</option>
+        </select>
+      </div>
+      <button class="builder-btn" id="build-btn" onclick="buildSite()">⚡ Generate site</button>
+    </div>
+
+    <div class="browser">
+      <div class="browser-bar">
+        <span class="browser-dot" style="background:#ff5f57"></span>
+        <span class="browser-dot" style="background:#febc2e"></span>
+        <span class="browser-dot" style="background:#28c840"></span>
+        <span class="browser-url" id="mock-url">yourbusiness.com</span>
+      </div>
+      <div class="browser-body">
+        <div class="builder-placeholder" id="builder-placeholder">
+          <div class="bp-icon">🪄</div>
+          <div>Your AI-generated preview will appear here</div>
+        </div>
+        <div class="builder-loading" id="builder-loading">
+          <div class="spinner"></div>
+          <div class="bl-text" id="bl-text">Designing your site…</div>
+        </div>
+        <div class="mock" id="mock"></div>
+      </div>
+    </div>
+    <p class="builder-note">✨ This is a quick stylized preview. The real site we build for you is fully custom, hand-tuned, and packed with features.</p>
+  </div>
+</section>
 
 <section id="services">
   <div class="section-label reveal">What we offer</div>
@@ -508,6 +694,32 @@
   <strong>Nextgen Sites</strong> &nbsp;·&nbsp; AI-Powered Websites for Local Businesses &nbsp;·&nbsp; Built with ❤️ for small business owners
 </footer>
 
+<!-- AI CHAT ASSISTANT -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" aria-label="Chat with us">💬</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="ch-avatar">✨</div>
+    <div>
+      <div class="ch-name">Nexa · AI Assistant</div>
+      <div class="ch-status">Online now</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">&times;</button>
+  </div>
+  <div class="chat-body" id="chatBody">
+    <div class="chat-msg bot">👋 Hi! I'm Nexa, the Nextgen Sites assistant. Ask me anything about our websites, pricing, or how we work!</div>
+  </div>
+  <div class="chat-suggestions" id="chatSuggestions">
+    <div class="chat-sugg" onclick="sendSuggestion('How much does a website cost?')">💰 Pricing</div>
+    <div class="chat-sugg" onclick="sendSuggestion('How long does it take?')">⏱️ Timeline</div>
+    <div class="chat-sugg" onclick="sendSuggestion('What do I get?')">📦 What's included</div>
+    <div class="chat-sugg" onclick="sendSuggestion('How do I get started?')">🚀 Get started</div>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" id="chatInput" placeholder="Type your message..." onkeydown="if(event.key==='Enter')sendChat()" />
+    <button class="chat-send" onclick="sendChat()">➤</button>
+  </div>
+</div>
+
 <script>
 /* ===== EYE → GALAXY BACKGROUND ===== */
 (function(){
@@ -519,8 +731,41 @@
 
   const fibers=[];
   for(let i=0;i<260;i++){ const a=Math.random()*Math.PI*2; fibers.push({a,len:0.45+Math.random()*0.5,w:0.3+Math.random()*1.2,hue:225+Math.random()*40,off:Math.random()}); }
+  // realistic iris: dense radial fibers with varied length, brightness, and start radius
+  const irisFibers=[];
+  for(let i=0;i<520;i++){
+    irisFibers.push({
+      a: Math.random()*Math.PI*2,
+      startR: 0.30+Math.random()*0.10,        // begins just outside collarette
+      len: 0.35+Math.random()*0.62,           // how far toward the edge
+      w: 0.5+Math.random()*1.8,
+      light: Math.random(),                    // brightness variation
+      curve: (Math.random()-0.5)*0.12,         // slight sway
+      off: Math.random()
+    });
+  }
+  // inner "petal" furrows around the collarette (the sunburst near the pupil)
+  const petals=[];
+  for(let i=0;i<46;i++){
+    petals.push({ a:(i/46)*Math.PI*2 + (Math.random()-0.5)*0.05, len:0.10+Math.random()*0.14, w:1+Math.random()*2.2, light:0.5+Math.random()*0.5 });
+  }
+  // crypt blotches (darker irregular patches for organic texture)
+  const crypts=[];
+  for(let i=0;i<60;i++){
+    crypts.push({ a:Math.random()*Math.PI*2, r:0.42+Math.random()*0.45, size:0.02+Math.random()*0.05, dark:0.3+Math.random()*0.4 });
+  }
+  // brighter starfield with a few standout bright stars
   const stars=[];
-  for(let i=0;i<440;i++){ stars.push({x:Math.random()*2-1,y:Math.random()*2-1,z:Math.random(),r:Math.random()*1.6+0.3,tw:Math.random()*Math.PI*2}); }
+  for(let i=0;i<620;i++){ stars.push({x:Math.random()*2-1,y:Math.random()*2-1,z:Math.random(),r:Math.random()*1.7+0.4,tw:Math.random()*Math.PI*2,big:Math.random()>0.93}); }
+  // spiral galaxy dust particles (arms)
+  const spiral=[];
+  const ARMS=2;
+  for(let i=0;i<900;i++){
+    const arm=Math.floor(Math.random()*ARMS);
+    const dist=Math.random();
+    const angle=dist*4.5 + arm*(Math.PI*2/ARMS) + (Math.random()-0.5)*0.5;
+    spiral.push({dist, angle, r:Math.random()*1.3+0.3, hue:225+Math.random()*45, off:Math.random()});
+  }
 
   let scrollProg=0;
   function onScroll(){ const max=window.innerHeight*1.4; scrollProg=Math.min(1, window.scrollY/max); }
@@ -533,61 +778,205 @@
     const p=scrollProg;
     const eyeFade=Math.max(0,1-p*1.5);
     const galaxyFade=Math.max(0,(p-0.15)/0.85);
-    const baseR=Math.min(W,H)*0.34;
+    const baseR=Math.min(W,H)*0.52;
     const zoom=1+p*2.4;
 
     if(galaxyFade>0){
-      const ng=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*0.8);
-      ng.addColorStop(0,`rgba(99,102,241,${0.20*galaxyFade})`);
-      ng.addColorStop(0.4,`rgba(129,140,248,${0.09*galaxyFade})`);
+      // nebula core glow
+      const ng=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*0.85);
+      ng.addColorStop(0,`rgba(129,140,248,${0.28*galaxyFade})`);
+      ng.addColorStop(0.25,`rgba(99,102,241,${0.16*galaxyFade})`);
+      ng.addColorStop(0.55,`rgba(76,29,149,${0.08*galaxyFade})`);
       ng.addColorStop(1,'rgba(10,10,15,0)');
       ctx.fillStyle=ng; ctx.fillRect(0,0,W,H);
+
+      // bright galactic core
+      const coreR=Math.min(W,H)*0.16;
+      const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,coreR);
+      cg.addColorStop(0,`rgba(255,255,255,${0.5*galaxyFade})`);
+      cg.addColorStop(0.3,`rgba(199,210,254,${0.35*galaxyFade})`);
+      cg.addColorStop(1,'rgba(129,140,248,0)');
+      ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(cx,cy,coreR,0,Math.PI*2); ctx.fill();
+
+      // rotating spiral arms
+      const rot=t*0.06;
+      const galR=Math.max(W,H)*0.62;
+      for(const sp of spiral){
+        const ang=sp.angle+rot;
+        const d=sp.dist*galR;
+        const x=cx+Math.cos(ang)*d;
+        const y=cy+Math.sin(ang)*d*0.55; // flatten for galaxy disk perspective
+        const tw=0.6+0.4*Math.sin(t*2+sp.off*6);
+        ctx.globalAlpha=galaxyFade*tw*(0.7-sp.dist*0.35);
+        ctx.fillStyle=`hsl(${sp.hue},80%,${70+sp.off*15}%)`;
+        ctx.beginPath(); ctx.arc(x,y,sp.r,0,Math.PI*2); ctx.fill();
+      }
+
+      // brighter twinkling starfield streaming outward
       for(const s of stars){
         const depth=(s.z+p*1.2)%1;
-        const dist=depth*Math.max(W,H)*0.75;
+        const dist=depth*Math.max(W,H)*0.78;
         const x=cx+Math.cos(s.x*Math.PI)*dist*(0.6+Math.abs(s.x));
         const y=cy+Math.sin(s.y*Math.PI)*dist*(0.6+Math.abs(s.y));
-        const tw=0.6+0.4*Math.sin(t*3+s.tw);
-        ctx.globalAlpha=galaxyFade*tw*(0.4+depth*0.6);
-        ctx.fillStyle=s.z>0.7?'#c7d2fe':(s.z>0.4?'#818cf8':'#ffffff');
-        ctx.beginPath(); ctx.arc(x,y,s.r*(0.5+depth),0,Math.PI*2); ctx.fill();
+        const tw=0.55+0.45*Math.sin(t*3.5+s.tw);
+        const rad=s.r*(0.6+depth)*(s.big?2.2:1);
+        if(s.big){
+          ctx.globalAlpha=galaxyFade*tw*0.5;
+          ctx.fillStyle='rgba(199,210,254,0.9)';
+          ctx.beginPath(); ctx.arc(x,y,rad*2.4,0,Math.PI*2); ctx.fill();
+        }
+        ctx.globalAlpha=Math.min(1,galaxyFade*tw*(0.55+depth*0.6));
+        ctx.fillStyle=s.z>0.7?'#ffffff':(s.z>0.4?'#c7d2fe':'#a5b4fc');
+        ctx.beginPath(); ctx.arc(x,y,rad,0,Math.PI*2); ctx.fill();
       }
       ctx.globalAlpha=1;
+
+      // ===== NEPTUNE (appears as you scroll into the galaxy) =====
+      const planetFade=Math.max(0,(p-0.45)/0.55);
+      if(planetFade>0){
+        const px=cx+Math.min(W,H)*0.30;
+        const py=cy-Math.min(W,H)*0.20;
+        const pr=Math.min(W,H)*0.085;
+        ctx.save();
+        ctx.globalAlpha=planetFade;
+        // outer atmospheric glow
+        const glow=ctx.createRadialGradient(px,py,pr*0.7,px,py,pr*1.9);
+        glow.addColorStop(0,'rgba(79,107,237,0.5)');
+        glow.addColorStop(1,'rgba(79,107,237,0)');
+        ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(px,py,pr*1.9,0,Math.PI*2); ctx.fill();
+        // planet body
+        const pg2=ctx.createRadialGradient(px-pr*0.35,py-pr*0.35,pr*0.1,px,py,pr);
+        pg2.addColorStop(0,'#6d7cf0');
+        pg2.addColorStop(0.5,'#3b46c4');
+        pg2.addColorStop(0.85,'#283593');
+        pg2.addColorStop(1,'#1a1f5c');
+        ctx.fillStyle=pg2;
+        ctx.beginPath(); ctx.arc(px,py,pr,0,Math.PI*2); ctx.fill();
+        // subtle atmospheric bands
+        ctx.save();
+        ctx.beginPath(); ctx.arc(px,py,pr,0,Math.PI*2); ctx.clip();
+        ctx.globalAlpha=planetFade*0.25;
+        ctx.strokeStyle='#aab4ff'; ctx.lineWidth=pr*0.10;
+        for(let b=-3;b<=3;b++){ ctx.beginPath(); ctx.moveTo(px-pr,py+b*pr*0.28+Math.sin(t+b)*2); ctx.bezierCurveTo(px-pr*0.3,py+b*pr*0.24,px+pr*0.3,py+b*pr*0.32,px+pr,py+b*pr*0.28); ctx.stroke(); }
+        // great dark spot
+        ctx.globalAlpha=planetFade*0.4;
+        ctx.fillStyle='#1a1f5c';
+        ctx.beginPath(); ctx.ellipse(px+pr*0.25,py+pr*0.15,pr*0.22,pr*0.15,0,0,Math.PI*2); ctx.fill();
+        ctx.restore();
+        // terminator shadow for depth
+        const sh=ctx.createRadialGradient(px-pr*0.3,py-pr*0.3,pr*0.2,px,py,pr);
+        sh.addColorStop(0,'rgba(0,0,0,0)');
+        sh.addColorStop(1,`rgba(0,0,10,${planetFade*0.55})`);
+        ctx.fillStyle=sh; ctx.beginPath(); ctx.arc(px,py,pr,0,Math.PI*2); ctx.fill();
+        ctx.restore();
+      }
     }
 
     if(eyeFade>0){
       const R=baseR*zoom;
-      const ig=ctx.createRadialGradient(cx,cy,R*0.16,cx,cy,R);
-      ig.addColorStop(0,`rgba(20,20,35,${eyeFade})`);
-      ig.addColorStop(0.18,`rgba(49,46,129,${eyeFade})`);
-      ig.addColorStop(0.5,`rgba(99,102,241,${eyeFade})`);
-      ig.addColorStop(0.8,`rgba(129,140,248,${eyeFade})`);
-      ig.addColorStop(1,`rgba(67,56,202,${eyeFade*0.3})`);
+      const pr=R*0.26;          // pupil radius
+
+      ctx.save();
+      // clip everything to the iris circle
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.clip();
+
+      // ===== IRIS base: zoned gradient (dark center → bright mid → deeper rim) =====
+      const ig=ctx.createRadialGradient(cx,cy,pr*0.95,cx,cy,R);
+      ig.addColorStop(0,`rgba(40,36,92,${eyeFade})`);
+      ig.addColorStop(0.22,`rgba(70,64,168,${eyeFade})`);     // collarette zone, brighter
+      ig.addColorStop(0.40,`rgba(120,130,245,${eyeFade})`);   // bright ciliary ring
+      ig.addColorStop(0.62,`rgba(92,98,225,${eyeFade})`);
+      ig.addColorStop(0.85,`rgba(64,60,170,${eyeFade})`);
+      ig.addColorStop(1,`rgba(40,38,120,${eyeFade})`);
       ctx.fillStyle=ig;
-      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
-      for(const f of fibers){
-        const r1=R*0.17, r2=R*(0.17+f.len*0.83);
-        const a=f.a+Math.sin(t*2+f.off*6)*0.02;
-        ctx.strokeStyle=`hsla(${f.hue},70%,${55+f.off*20}%,${eyeFade*0.5})`;
+      ctx.fillRect(cx-R,cy-R,R*2,R*2);
+
+      // ===== long radial fibers (the dominant iris texture) =====
+      for(const f of irisFibers){
+        const r1=R*f.startR, r2=R*Math.min(0.99, f.startR+f.len);
+        const a=f.a+Math.sin(t*1.5+f.off*6)*0.008;
+        const a2=a+f.curve;
+        // brightness: some bright/silvery, some dark
+        const L=28+f.light*60;
+        const alpha=eyeFade*(0.25+f.light*0.4);
+        ctx.strokeStyle=`hsla(${230+f.light*25},${55+f.light*25}%,${L}%,${alpha})`;
         ctx.lineWidth=f.w;
         ctx.beginPath();
         ctx.moveTo(cx+Math.cos(a)*r1, cy+Math.sin(a)*r1);
-        ctx.lineTo(cx+Math.cos(a)*r2, cy+Math.sin(a)*r2);
+        ctx.quadraticCurveTo(
+          cx+Math.cos((a+a2)/2)*(r1+r2)/2, cy+Math.sin((a+a2)/2)*(r1+r2)/2,
+          cx+Math.cos(a2)*r2, cy+Math.sin(a2)*r2);
         ctx.stroke();
       }
-      ctx.strokeStyle=`rgba(30,27,75,${eyeFade*0.8})`;
-      ctx.lineWidth=R*0.04;
-      ctx.beginPath(); ctx.arc(cx,cy,R*0.98,0,Math.PI*2); ctx.stroke();
-      const pr=R*0.17;
+
+      // ===== crypt blotches (dark irregular patches) =====
+      for(const c of crypts){
+        const x=cx+Math.cos(c.a)*R*c.r, y=cy+Math.sin(c.a)*R*c.r;
+        const g=ctx.createRadialGradient(x,y,0,x,y,R*c.size);
+        g.addColorStop(0,`rgba(25,22,70,${eyeFade*c.dark})`);
+        g.addColorStop(1,'rgba(25,22,70,0)');
+        ctx.fillStyle=g;
+        ctx.beginPath(); ctx.arc(x,y,R*c.size,0,Math.PI*2); ctx.fill();
+      }
+
+      // ===== bright ciliary ring highlight (the luminous band ~40% out) =====
+      const ring=ctx.createRadialGradient(cx,cy,R*0.34,cx,cy,R*0.52);
+      ring.addColorStop(0,'rgba(150,160,255,0)');
+      ring.addColorStop(0.5,`rgba(165,175,255,${eyeFade*0.28})`);
+      ring.addColorStop(1,'rgba(150,160,255,0)');
+      ctx.fillStyle=ring;
+      ctx.fillRect(cx-R,cy-R,R*2,R*2);
+
+      // ===== petal furrows (sunburst spokes just outside the pupil) =====
+      for(const p2 of petals){
+        const r1=pr*1.05, r2=pr*(1.05+p2.len*4);
+        ctx.strokeStyle=`hsla(235,70%,${55+p2.light*30}%,${eyeFade*0.5})`;
+        ctx.lineWidth=p2.w;
+        ctx.beginPath();
+        ctx.moveTo(cx+Math.cos(p2.a)*r1, cy+Math.sin(p2.a)*r1);
+        ctx.lineTo(cx+Math.cos(p2.a)*r2, cy+Math.sin(p2.a)*r2);
+        ctx.stroke();
+      }
+
+      // ===== inner dark zone around pupil (pigment ruff) =====
+      const innerSh=ctx.createRadialGradient(cx,cy,pr,cx,cy,pr*1.7);
+      innerSh.addColorStop(0,`rgba(15,12,45,${eyeFade*0.85})`);
+      innerSh.addColorStop(1,'rgba(15,12,45,0)');
+      ctx.fillStyle=innerSh;
+      ctx.beginPath(); ctx.arc(cx,cy,pr*1.7,0,Math.PI*2); ctx.fill();
+
+      ctx.restore(); // end iris clip
+
+      // ===== LIMBAL RING (dark crisp ring at iris edge) =====
+      ctx.strokeStyle=`rgba(18,15,48,${eyeFade*0.85})`;
+      ctx.lineWidth=R*0.045;
+      ctx.beginPath(); ctx.arc(cx,cy,R*0.978,0,Math.PI*2); ctx.stroke();
+
+      // soft vignette blending iris into dark background
+      const vig=ctx.createRadialGradient(cx,cy,R*0.94,cx,cy,R*1.5);
+      vig.addColorStop(0,'rgba(10,10,15,0)');
+      vig.addColorStop(1,`rgba(10,10,15,${eyeFade})`);
+      ctx.fillStyle=vig;
+      ctx.beginPath(); ctx.arc(cx,cy,R*1.5,0,Math.PI*2); ctx.fill();
+
+      // ===== PUPIL (deep black, round) =====
       const pg=ctx.createRadialGradient(cx,cy,0,cx,cy,pr);
-      pg.addColorStop(0,'rgba(5,5,12,1)');
-      pg.addColorStop(0.7,`rgba(10,10,20,${eyeFade})`);
-      pg.addColorStop(1,`rgba(40,40,90,${eyeFade*0.6})`);
+      pg.addColorStop(0,'rgba(0,0,0,1)');
+      pg.addColorStop(0.85,`rgba(3,3,10,${eyeFade})`);
+      pg.addColorStop(1,`rgba(28,26,62,${eyeFade})`);
       ctx.fillStyle=pg;
       ctx.beginPath(); ctx.arc(cx,cy,pr,0,Math.PI*2); ctx.fill();
-      ctx.globalAlpha=eyeFade*0.8;
-      ctx.fillStyle='rgba(200,210,255,0.6)';
-      ctx.beginPath(); ctx.arc(cx-pr*0.4,cy-pr*0.4,pr*0.18,0,Math.PI*2); ctx.fill();
+
+      // ===== CATCHLIGHT (bright reflection) =====
+      ctx.globalAlpha=eyeFade;
+      const cl=ctx.createRadialGradient(cx-pr*0.4,cy-pr*0.5,0,cx-pr*0.4,cy-pr*0.5,pr*0.62);
+      cl.addColorStop(0,'rgba(255,255,255,0.97)');
+      cl.addColorStop(0.55,'rgba(225,232,255,0.42)');
+      cl.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.fillStyle=cl;
+      ctx.beginPath(); ctx.arc(cx-pr*0.4,cy-pr*0.5,pr*0.62,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,0.5)';
+      ctx.beginPath(); ctx.arc(cx+pr*0.33,cy+pr*0.3,pr*0.1,0,Math.PI*2); ctx.fill();
       ctx.globalAlpha=1;
     }
     requestAnimationFrame(draw);
@@ -632,6 +1021,242 @@ function qReset(){
   document.getElementById('qresult').classList.remove('active');
   document.querySelectorAll('.quiz-step').forEach(s=>s.classList.remove('active'));
   document.querySelector('.quiz-step[data-step="0"]').classList.add('active');
+}
+
+/* ===== HERO TYPING ANIMATION ===== */
+(function(){
+  const phrases = ['a real website', 'more customers', 'a strong online presence', 'to be found on Google', 'results'];
+  const el = document.getElementById('typed');
+  if(!el) return;
+  let pi=0, ci=0, deleting=false;
+  function tick(){
+    const word = phrases[pi];
+    if(!deleting){
+      el.textContent = word.slice(0, ci+1); ci++;
+      if(ci===word.length){ deleting=true; return setTimeout(tick, 1600); }
+    } else {
+      el.textContent = word.slice(0, ci-1); ci--;
+      if(ci===0){ deleting=false; pi=(pi+1)%phrases.length; return setTimeout(tick, 300); }
+    }
+    setTimeout(tick, deleting?45:80);
+  }
+  setTimeout(tick, 1400);
+})();
+
+/* ===== LIVE SITE BUILDER DEMO ===== */
+const bizThemes = {
+  bakery:      { c1:'#f59e0b', c2:'#fffbeb', accent:'#fef3c7', text:'#451a03', ico:'🥐', tag:'Fresh Baked Daily',
+                 sub:'Handcrafted breads, pastries & cakes made from scratch every morning with locally-sourced ingredients.',
+                 stats:[['15+','Years baking'],['50+','Daily fresh items'],['4.9★','Customer rating']],
+                 servLabel:'Our Treats', cards:[['🍞','Artisan Breads','Sourdough, baguettes & more'],['🎂','Custom Cakes','For birthdays & weddings'],['☕','Coffee Bar','Locally roasted, always hot']],
+                 gallery:['🥐','🍰','🧁','🥖','🍪','🥯','🎂','🍞'],
+                 review:['★★★★★','"The best croissants in town — flaky, buttery perfection. We come every weekend!"','— Sarah M.'],
+                 ctaH:'Order your custom cake today', ctaP:'Call ahead or stop by — we love special requests.' },
+  salon:       { c1:'#ec4899', c2:'#fdf2f8', accent:'#fce7f3', text:'#500724', ico:'💇', tag:'Look & Feel Your Best',
+                 sub:'Expert stylists, a relaxing atmosphere, and personalized service to bring out your best look.',
+                 stats:[['10+','Expert stylists'],['5,000+','Happy clients'],['4.9★','Average rating']],
+                 servLabel:'Our Services', cards:[['✂️','Haircuts & Styling','Cuts for every look'],['💅','Nails','Manicures & pedicures'],['✨','Color & Highlights','Expert color services']],
+                 gallery:['💇','💅','✂️','💄','✨','💆','🪞','🌸'],
+                 review:['★★★★★','"I always leave feeling like a new person. The team is so talented and friendly!"','— Jessica R.'],
+                 ctaH:'Book your appointment', ctaP:'New clients get 15% off their first visit.' },
+  landscaping: { c1:'#16a34a', c2:'#f0fdf4', accent:'#dcfce7', text:'#052e16', ico:'🌳', tag:'Your Yard, Transformed',
+                 sub:'From routine lawn care to full landscape design, we make your outdoor space beautiful year-round.',
+                 stats:[['20+','Years experience'],['500+','Yards maintained'],['4.8★','Customer rating']],
+                 servLabel:'What We Do', cards:[['🌱','Lawn Care','Mowing, edging & treatment'],['🌷','Landscape Design','Custom gardens & beds'],['🍂','Seasonal Cleanup','Spring & fall maintenance']],
+                 gallery:['🌳','🌷','🌿','🏡','🌻','🍃','🌲','🌹'],
+                 review:['★★★★★','"They turned our boring yard into something straight out of a magazine. Incredible work!"','— Mike & Dana T.'],
+                 ctaH:'Get a free yard estimate', ctaP:'We\'ll walk your property and give you an honest quote.' },
+  cleaning:    { c1:'#0ea5e9', c2:'#f0f9ff', accent:'#e0f2fe', text:'#082f49', ico:'🧽', tag:'Spotless, Every Time',
+                 sub:'Reliable, detail-oriented cleaning for homes and offices. Bonded, insured, and trusted by hundreds.',
+                 stats:[['1,000+','Cleans completed'],['100%','Satisfaction guarantee'],['4.9★','Average rating']],
+                 servLabel:'Our Services', cards:[['🏠','Home Cleaning','Deep & recurring cleans'],['🏢','Office Cleaning','Commercial spaces'],['📦','Move-Out Cleans','Get your deposit back']],
+                 gallery:['🧽','🧹','✨','🪣','🧼','🚿','🪟','🛁'],
+                 review:['★★★★★','"My house has never been cleaner. Punctual, professional, and worth every penny."','— Linda K.'],
+                 ctaH:'Book your first clean', ctaP:'Get a free quote in under a minute.' },
+  auto:        { c1:'#dc2626', c2:'#fef2f2', accent:'#fee2e2', text:'#450a0a', ico:'🔧', tag:'Honest Auto Repair',
+                 sub:'Straightforward service, fair prices, and quality work. We treat your car like it\'s our own.',
+                 stats:[['25+','Years in business'],['ASE','Certified techs'],['4.8★','Customer rating']],
+                 servLabel:'Our Services', cards:[['🛢️','Oil Changes','Quick & affordable'],['🔧','Repairs','Engine, brakes & more'],['🔍','Diagnostics','We find it fast']],
+                 gallery:['🚗','🔧','🛞','⚙️','🔩','🛢️','🚙','🔋'],
+                 review:['★★★★★','"Finally, a mechanic I trust. They explained everything and didn\'t upsell me. Highly recommend."','— Robert P.'],
+                 ctaH:'Schedule your service', ctaP:'Same-day appointments often available.' },
+  fitness:     { c1:'#7c3aed', c2:'#faf5ff', accent:'#f3e8ff', text:'#3b0764', ico:'💪', tag:'Stronger Every Day',
+                 sub:'State-of-the-art equipment, energizing classes, and expert trainers to help you crush your goals.',
+                 stats:[['24/7','Open access'],['30+','Weekly classes'],['4.9★','Member rating']],
+                 servLabel:'What We Offer', cards:[['🏋️','Strength','Free weights & machines'],['🧘','Classes','Yoga, HIIT & spin'],['👟','Personal Training','1-on-1 coaching']],
+                 gallery:['💪','🏋️','🧘','🤸','🚴','🏃','🥊','🤼'],
+                 review:['★★★★★','"Best gym I\'ve ever joined. Great energy, clean facilities, and trainers who actually care."','— Marcus W.'],
+                 ctaH:'Start with a free trial', ctaP:'No commitment — come see if we\'re the right fit.' },
+  restaurant:  { c1:'#ea580c', c2:'#fff7ed', accent:'#ffedd5', text:'#431407', ico:'🍽️', tag:'Taste the Difference',
+                 sub:'Fresh, made-to-order dishes in a warm, welcoming atmosphere. Dine in, take out, or reserve a table.',
+                 stats:[['12+','Years serving'],['100+','Menu items'],['4.8★','Diner rating']],
+                 servLabel:'Why Dine With Us', cards:[['🍝','Fresh Menu','Made-to-order daily'],['🍷','Full Bar','Wine, beer & cocktails'],['📅','Reservations','Book online anytime']],
+                 gallery:['🍝','🍕','🥗','🍷','🍰','🍤','🥘','🍮'],
+                 review:['★★★★★','"Every dish is bursting with flavor. The service is warm and the atmosphere is perfect for date night."','— Anna & Joe L.'],
+                 ctaH:'Reserve your table', ctaP:'Walk-ins welcome, reservations recommended.' },
+  contractor:  { c1:'#0891b2', c2:'#ecfeff', accent:'#cffafe', text:'#083344', ico:'🔨', tag:'Built to Last',
+                 sub:'Quality craftsmanship for remodels, additions, and repairs. Licensed, insured, and on-time.',
+                 stats:[['18+','Years building'],['300+','Projects done'],['4.9★','Client rating']],
+                 servLabel:'Our Work', cards:[['🏗️','Remodels','Kitchens & bathrooms'],['🪜','Additions','Expand your space'],['🛠️','Repairs','Done right the first time']],
+                 gallery:['🏗️','🔨','🪚','🧱','🪜','🚪','🪟','🛠️'],
+                 review:['★★★★★','"They finished on time and on budget, and the quality is outstanding. We\'ll use them again."','— The Hendersons'],
+                 ctaH:'Get your free quote', ctaP:'Tell us about your project — no obligation.' },
+};
+const loadingMsgs = ['Analyzing your business…','Choosing a color palette…','Designing the layout…','Writing your content…','Adding finishing touches…'];
+
+function buildSite(){
+  const name = (document.getElementById('biz-name').value || 'Your Business').trim();
+  const type = document.getElementById('biz-type').value;
+  const theme = bizThemes[type];
+  const btn = document.getElementById('build-btn');
+  const loading = document.getElementById('builder-loading');
+  const placeholder = document.getElementById('builder-placeholder');
+  const mock = document.getElementById('mock');
+  const blText = document.getElementById('bl-text');
+
+  // url slug
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g,'').slice(0,18) || 'yourbusiness';
+  document.getElementById('mock-url').textContent = slug + '.com';
+
+  btn.disabled = true;
+  placeholder.style.display = 'none';
+  mock.classList.remove('active');
+  loading.classList.add('active');
+
+  // cycle loading messages
+  let mi=0; blText.textContent = loadingMsgs[0];
+  const msgTimer = setInterval(()=>{ mi=(mi+1)%loadingMsgs.length; blText.textContent=loadingMsgs[mi]; }, 600);
+
+  setTimeout(()=>{
+    clearInterval(msgTimer);
+    loading.classList.remove('active');
+    // build mock
+    mock.style.background = theme.c2;
+    mock.style.color = theme.text;
+    const hexToRgba = (h,a)=>{ const n=parseInt(h.slice(1),16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; };
+    mock.innerHTML =
+      // nav
+      '<div class="mock-nav" style="background:'+hexToRgba(theme.c2,0.9)+'">'+
+        '<div class="mock-logo" style="color:'+theme.c1+'">'+theme.ico+' '+escapeHtml(name)+'</div>'+
+        '<div class="mock-links"><span>Home</span><span>Services</span><span>Gallery</span><span>About</span>'+
+        '<span class="ml-cta" style="background:'+theme.c1+'">Contact</span></div></div>'+
+      // hero
+      '<div class="mock-hero">'+
+        '<span class="mh-badge" style="background:'+theme.accent+';color:'+theme.c1+'">★ Trusted Local Business</span>'+
+        '<h3>'+theme.tag+'</h3>'+
+        '<p>'+theme.sub+'</p>'+
+        '<div class="mock-hero-btns">'+
+          '<span class="mock-btn" style="background:'+theme.c1+'">Get a Free Quote</span>'+
+          '<span class="mock-btn ghost" style="color:'+theme.c1+'">Learn More</span>'+
+        '</div></div>'+
+      // stats band
+      '<div class="mock-stats" style="background:'+theme.accent+'">'+
+        theme.stats.map(s=>'<div class="mock-stat"><div class="ms-n" style="color:'+theme.c1+'">'+s[0]+'</div><div class="ms-l">'+s[1]+'</div></div>').join('')+
+      '</div>'+
+      // services
+      '<div class="mock-section-label" style="color:'+theme.c1+'">'+theme.servLabel+'</div>'+
+      '<div class="mock-section-title">What we offer</div>'+
+      '<div class="mock-cards">'+
+        theme.cards.map(c=>'<div class="mock-card" style="background:'+hexToRgba(theme.c1,0.07)+'"><div class="mc-ico">'+c[0]+'</div><div class="mc-t">'+c[1]+'</div><div class="mc-d">'+c[2]+'</div></div>').join('')+
+      '</div>'+
+      // gallery
+      '<div class="mock-section-label" style="color:'+theme.c1+'">Our Work</div>'+
+      '<div class="mock-section-title">Recent projects</div>'+
+      '<div class="mock-gallery">'+
+        theme.gallery.map(g=>'<div class="mock-gal-item" style="background:'+hexToRgba(theme.c1,0.12)+'">'+g+'</div>').join('')+
+      '</div>'+
+      // review
+      '<div class="mock-review" style="background:'+hexToRgba(theme.c1,0.07)+'">'+
+        '<div class="mr-stars" style="color:'+theme.c1+'">'+theme.review[0]+'</div>'+
+        '<div class="mr-text">'+theme.review[1]+'</div>'+
+        '<div class="mr-name">'+theme.review[2]+'</div></div>'+
+      // cta band
+      '<div class="mock-cta-band" style="background:'+theme.c1+';color:#fff">'+
+        '<h4>'+theme.ctaH+'</h4><p>'+theme.ctaP+'</p>'+
+        '<span class="mock-btn" style="background:#fff;color:'+theme.c1+'">Contact Us Today</span></div>'+
+      // footer
+      '<div class="mock-footer">© 2026 '+escapeHtml(name)+' · '+theme.ico+' · Built by Nextgen Sites</div>';
+    mock.classList.add('active');
+    btn.disabled = false;
+    btn.textContent = '⚡ Generate again';
+  }, 3000);
+}
+function escapeHtml(s){ return s.replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+/* ===== AI CHAT ASSISTANT ===== */
+let chatOpen=false, chatHistory=[];
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('chatPanel').classList.toggle('open', chatOpen);
+  document.getElementById('chatFab').textContent = chatOpen ? '✕' : '💬';
+  if(chatOpen) setTimeout(()=>document.getElementById('chatInput').focus(), 100);
+}
+function sendSuggestion(text){ document.getElementById('chatInput').value=text; sendChat(); }
+function addMsg(text, who){
+  const body=document.getElementById('chatBody');
+  const d=document.createElement('div');
+  d.className='chat-msg '+who;
+  d.textContent=text;
+  body.appendChild(d);
+  body.scrollTop=body.scrollHeight;
+}
+function showTyping(){
+  const body=document.getElementById('chatBody');
+  const d=document.createElement('div');
+  d.className='chat-typing'; d.id='typingIndicator';
+  d.innerHTML='<span></span><span></span><span></span>';
+  body.appendChild(d); body.scrollTop=body.scrollHeight;
+}
+function hideTyping(){ const t=document.getElementById('typingIndicator'); if(t) t.remove(); }
+
+async function sendChat(){
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text) return;
+  addMsg(text,'user');
+  input.value='';
+  document.getElementById('chatSuggestions').style.display='none';
+  chatHistory.push({role:'user', content:text});
+  showTyping();
+
+  const systemPrompt = "You are Nexa, the friendly AI assistant for Nextgen Sites, a web design business that builds modern, professional websites for local businesses using AI. Keep answers short, warm, and helpful (2-4 sentences max). Key facts: Starter plan is $499 one-time (up to 3 pages, mobile-friendly, contact form, basic SEO). Growth plan is $799 one-time (up to 6 pages, AI features, full SEO, social media setup, Google Business integration) and is most popular. Pro plan is $999/year (everything in Growth plus monthly updates, priority support, unlimited small edits). Most sites are live within 7 days. The process: you chat with us, we build a draft in 48-72 hours, you review, then go live. We're local-focused and personal. To get started, they fill out the contact form on this page. If asked something off-topic, gently steer back to websites. Never make up features we don't offer.";
+
+  try {
+    const messages = chatHistory.slice(-8);
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-6",
+        max_tokens:1000,
+        system: systemPrompt,
+        messages: messages
+      })
+    });
+    if(!res.ok) throw new Error('API error');
+    const data=await res.json();
+    const reply=data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
+    hideTyping();
+    addMsg(reply || "Sorry, I didn't catch that — could you rephrase?", 'bot');
+    chatHistory.push({role:'assistant', content:reply});
+  } catch(err) {
+    hideTyping();
+    addMsg(scriptedReply(text), 'bot');
+  }
+}
+
+/* fallback scripted answers if the live AI isn't reachable */
+function scriptedReply(text){
+  const t=text.toLowerCase();
+  if(/(price|cost|how much|\$|pricing|afford)/.test(t)) return "Our plans start at $499 (Starter), $799 (Growth — most popular), and $999/year (Pro). Each is a flat, honest price with no hidden fees. Want me to break down what's included?";
+  if(/(how long|time|fast|days|turnaround|when)/.test(t)) return "Most sites are live within 7 days! You'll usually see a first draft within 48–72 hours of our initial chat. ⚡";
+  if(/(include|get|feature|what do|offer)/.test(t)) return "Every site includes a clean mobile-friendly design, contact form, and basic SEO. Growth and Pro add AI features, full SEO, social setup, and ongoing updates. 📦";
+  if(/(start|begin|sign up|how do i|get going|next step)/.test(t)) return "Easy — just scroll down to the contact form and tell us a bit about your business. We'll get back to you within 24 hours! 🚀";
+  if(/(seo|google|found|search)/.test(t)) return "Yes! Every site includes basic SEO so local customers can find you on Google, and our Growth/Pro plans include full SEO optimization. 🔍";
+  if(/(ai|artificial|how.*build|technology)/.test(t)) return "We use cutting-edge AI tools to design and build your site fast, then hand-tune every detail so it's truly custom to your business. 🤖";
+  if(/(hi|hello|hey|sup|yo)\b/.test(t)) return "Hey there! 👋 I'd love to help. Are you curious about pricing, timeline, or what's included?";
+  if(/(contact|phone|email|reach|talk)/.test(t)) return "The fastest way is the contact form right here on the page — fill it out and we'll reach back within 24 hours! You can also use it to ask for a custom quote.";
+  return "Great question! Nextgen Sites builds modern, affordable websites for local businesses — starting at $499, usually live within 7 days. Ask me about pricing, timeline, or how to get started, or scroll down to the contact form to reach the team directly! 😊";
 }
 
 /* ===== SCROLL REVEAL ===== */
