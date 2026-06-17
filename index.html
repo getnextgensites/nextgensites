@@ -255,13 +255,23 @@
   .portfolio-info p { color: var(--muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1.5rem; }
   .portfolio-link { display: inline-flex; align-items: center; gap: 6px; color: var(--accent2); font-weight: 700; font-size: 0.92rem; }
   .portfolio-visual {
-    background: linear-gradient(135deg, #3a2818, #1a1208); position: relative;
+    background: linear-gradient(135deg, #1a1a2e, #12121a); position: relative;
     display: flex; align-items: center; justify-content: center; min-height: 260px; overflow: hidden;
   }
+  .portfolio-visual::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 70% 30%, rgba(99,102,241,0.25), transparent 60%);
+  }
   .portfolio-visual img { width: 100%; height: 100%; object-fit: cover; }
-  .portfolio-fallback { text-align: center; padding: 2rem; }
-  .portfolio-fallback .pf-logo { font-family: Georgia, serif; font-size: 1.6rem; font-weight: 700; color: #e3c862; letter-spacing: -0.01em; }
-  .portfolio-fallback .pf-sub { font-size: 0.8rem; color: #b89b5a; margin-top: 0.3rem; letter-spacing: 0.05em; }
+  .portfolio-fallback { text-align: center; padding: 2rem; position: relative; z-index: 1; }
+  .portfolio-fallback .pf-logo { font-size: 1.6rem; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
+  .portfolio-fallback .pf-sub { font-size: 0.8rem; color: var(--accent2); margin-top: 0.4rem; letter-spacing: 0.05em; }
+  .portfolio-fallback .pf-badge {
+    display: inline-flex; align-items: center; gap: 6px; margin-bottom: 1rem;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent2); background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3);
+    padding: 0.3rem 0.8rem; border-radius: 99px;
+  }
   @media (max-width: 640px) { .portfolio-card { grid-template-columns: 1fr; } .portfolio-visual { min-height: 200px; } }
 
   @media (max-width: 600px) {
@@ -469,6 +479,7 @@
     </div>
     <div class="portfolio-visual">
       <div class="portfolio-fallback">
+        <div class="pf-badge"><span class="badge-dot"></span> Live Project</div>
         <div class="pf-logo">Hibbard Floor &amp; More</div>
         <div class="pf-sub">Dayton → Cincinnati</div>
       </div>
